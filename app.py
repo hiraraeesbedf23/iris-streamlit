@@ -1,31 +1,25 @@
-# app.py
 import streamlit as st
-import joblib
 import numpy as np
+import joblib
 
-# Title
+st.set_page_config(page_title="Iris Prediction")
+
 st.title("🌸 Iris Flower Classification")
+st.write("Predict the species of Iris flower using Decision Tree Model")
 
-st.write("Enter the details of the flower below:")
+# Load model
+model = joblib.load("iris_decision_tree_model.pkl")
 
-# Input fields for features
-sepal_length = st.number_input("Sepal Length (cm)", min_value=0.0, max_value=10.0, value=5.0)
-sepal_width  = st.number_input("Sepal Width (cm)", min_value=0.0, max_value=10.0, value=3.5)
-petal_length = st.number_input("Petal Length (cm)", min_value=0.0, max_value=10.0, value=1.4)
-petal_width  = st.number_input("Petal Width (cm)", min_value=0.0, max_value=10.0, value=0.2)
+st.header("Input Features")
 
-# Load the trained model
-model = joblib.load("iris_rf_model.joblib")
+sepal_length = st.number_input("Sepal Length (cm)", min_value=4.0, max_value=8.0, value=5.8)
+sepal_width  = st.number_input("Sepal Width (cm)", min_value=2.0, max_value=4.5, value=3.0)
+petal_length = st.number_input("Petal Length (cm)", min_value=1.0, max_value=7.0, value=4.0)
+petal_width  = st.number_input("Petal Width (cm)", min_value=0.1, max_value=2.5, value=1.2)
 
-# Button for prediction
 if st.button("Predict"):
-    # Prepare input for model
-    features = np.array([[sepal_length, sepal_width, petal_length, petal_width]])
-    prediction = model.predict(features)
-    
-    # Map numeric prediction to species name
-    species = ["Iris Setosa", "Iris Versicolor", "Iris Virginica"]
-    predicted_species = species[prediction[0]]
-    
-    # Display result
-    st.success(f"Predicted Flower Species: {predicted_species}")
+    input_data = np.array([[sepal_length, sepal_width, petal_length, petal_width]])
+    prediction = model.predict(input_data)
+
+    species = ["Setosa", "Versicolor", "Virginica"]
+    st.success(f"Predicted Species: 🌼 {species[prediction[0]]}")
